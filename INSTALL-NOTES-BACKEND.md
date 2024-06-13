@@ -1,5 +1,20 @@
 
 
+##### LIVE LINKS
+```
+FRONTEND:
+
+
+
+
+BACKEND:
+
+
+
+```
+
+
+
 gcloud storage cp --recursive gs://heidless-pfolio-0-bucket/images/* .
 
 
@@ -90,7 +105,7 @@ gcloud sql instances describe --project $GCP_PROJECT $GCP_INSTANCE
 ```
 # initialise BUCKET
 
-echo $GCP_INSTANCE
+echo $GCP_BUCKET
 echo ' '
 gsutil mb -l europe-west2 gs://$GCP_BUCKET
 
@@ -145,9 +160,8 @@ Storage Admin
 /home/heidless/projects/backend-live/app/config
 
 ---
-# export GCP_CREDENTIALS=heidless-pfolio-0-e833e59d0de6.json
 
-export GS_CREDENTIALS=heidless-pfolio-1-cd451ac7ab7c.json
+export GS_CREDENTIALS=heidless-pfolio-1-14c6bbe84818.json
 
 ---
 ```
@@ -162,8 +176,11 @@ echo DEBUG=True > .env
 echo DATABASE_URL=$GCP_DB_URL >> .env
 echo GS_BUCKET_NAME=$GCP_BUCKET >> .env
 echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | head -n1) >> .env
-echo FRONTEND_URL=https://frontend-0-svc-drfa3ebckq-nw.a.run.app/ >> .env
+echo FRONTEND_URL=https://heidless-pfolio-1-frontend-svc-kedn5kyj3a-ew.a.run.app/ >> .env
+echo ' '
 more .env
+
+#echo FRONTEND_URL=https://frontend-0-svc-drfa3ebckq-nw.a.run.app/ >> .env
 
 # store in secret manager
 # enable secretmanager.googleapis.com if asked
@@ -186,6 +203,7 @@ gcloud secrets add-iam-policy-binding $GCP_SECRET_SETTINGS \
     --role roles/secretmanager.secretAccessor
 
 # test - retrieve content of '$GCP_SECRET_SETTINGS'
+echo ' '
 gcloud secrets versions access latest --secret $GCP_SECRET_SETTINGS && echo ""
 
 ```
@@ -221,7 +239,8 @@ chmod 777 cloud-sql-proxy
 ```
 
 ```
-source ./.env-vars
+cd config
+source .env-vars
 
 echo $GCP_CREDENTIALS
 echo $GCP_PROJECT
@@ -252,9 +271,6 @@ postgres
 
 ```
 
-## config/.env-vars
-export GCP_CREDENTIALS=heidless-pfolio-1-cd451ac7ab7c.json
-
 ### ESSENTIAL: set CLOUD vars
 source ./config/.env-vars
 source ./.env-vars
@@ -262,12 +278,12 @@ source ./.env-vars
 ## config/edit settings.py
 ```
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    os.path.join(BASE_DIR, 'config/heidless-pfolio-1-cd451ac7ab7c.json')
+    os.path.join(BASE_DIR, 'config/heidless-pfolio-1-14c6bbe84818.json')
 )
 
-GS_BUCKET_NAME = 'pfolio-2-bucket'
+GS_BUCKET_NAME = 'heidless-pfolio-1-bucket'
 
-settings_name = os.environ.get('SETTINGS_NAME', 'pfolio-2-secret')
+settings_name = os.environ.get('SETTINGS_NAME', 'heidless-pfolio-1-backend-secret')
 
 ```
 

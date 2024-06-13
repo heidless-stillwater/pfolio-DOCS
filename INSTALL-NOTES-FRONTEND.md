@@ -7,10 +7,10 @@
 export GCP_PROJECT=heidless-pfolio-1
 echo $GCP_PROJECT
 
-export GCP_APP_NAME=frontend-1
+export GCP_APP_NAME=${GCP_PROJECT}-frontend
 echo $GCP_APP_NAME
 
-export GCP_BUCKET=$GCP_PROJECT-bucket
+export GCP_BUCKET=${GCP_PROJECT}-bucket
 echo $GCP_BUCKET
 
 ```
@@ -49,11 +49,6 @@ gsutil mb -l europe-west2 gs://$GCP_BUCKET
 
 ## push to repository
 ```
-
-
-nvm use 22.2.0
-npm install -g npm@10.8.1
-
 # build in artefact repository
 gcloud builds submit --tag gcr.io/$GCP_PROJECT/$GCP_APP_NAME .
 
